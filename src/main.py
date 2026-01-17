@@ -3,6 +3,9 @@ from discord.ext import commands
 import json
 import asyncio
 from datetime import datetime
+# Flask сервер для обработки HTTP запросов
+from flask import Flask
+from threading import Thread
 
 # Импортируем модули
 from database import init_db, cleanup_expired_transfers
@@ -25,6 +28,17 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 intents.guilds = True
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run).start()
 
 bot = commands.Bot(
     command_prefix=PREFIX,
@@ -129,4 +143,5 @@ if __name__ == "__main__":
     try:
         bot.run(TOKEN)
     except Exception as e:
+
         print(f"Ошибка при запуске бота: {e}")
